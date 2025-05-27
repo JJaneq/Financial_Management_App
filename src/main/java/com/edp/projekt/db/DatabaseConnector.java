@@ -16,9 +16,17 @@ public class DatabaseConnector {
     private static final String USER = dotenv.get("DB_USERNAME");
     private static final String PASSWORD = dotenv.get("DB_PASSWORD");
 
+    private static Connection connection;
+
     public static Connection connect() throws SQLException, ClassNotFoundException {
-        // Zmieniamy driver na MySQL
         Class.forName("com.mysql.cj.jdbc.Driver");
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
+
+//    public static Connection getConnection() throws SQLException, ClassNotFoundException {
+//        if (connection == null) {
+//            connection = connect();
+//        }
+//        return connection;
+//    }
 }

@@ -2,6 +2,7 @@ package com.edp.projekt.controller;
 
 import com.edp.projekt.db.User;
 import com.edp.projekt.db.UserDAO;
+import com.edp.projekt.service.ServiceManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -18,6 +19,12 @@ public class UserCreationController {
     TextField moneyText;
     @FXML
     TextField monthlyLimitText;
+
+    MainController parentController;
+
+    public void setParentController(MainController mainController) {
+        this.parentController = mainController;
+    }
 
     @FXML
     private void onCancelButtonClicked(ActionEvent event) {
@@ -38,8 +45,11 @@ public class UserCreationController {
             if (monthlyLimitText.getText().trim().isEmpty())
                 newUser.setMonthLimit(0.0F);
             else
-                newUser.setMonthLimit(Float.parseFloat(moneyText.getText()));
+                newUser.setMonthLimit(Float.parseFloat(monthlyLimitText.getText()));
             UserDAO.addUser(newUser);
+            newUser = UserDAO.getUser(newUser.getUsername());
+            ServiceManager.saveLastUserId(newUser.getId());
+            parentController.updateUser();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.close();
         }
