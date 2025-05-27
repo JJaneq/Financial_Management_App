@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="createUserView" prefHeight="220.0" prefWidth="280.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.edp.projekt.controller.UserCreationController">
+   <children>
+      <Label text="Podaj nazwę profilu:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+      <Label layoutX="10.0" layoutY="10.0" text="Podaj dostępne środki:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="60.0" />
+      <Label layoutX="20.0" layoutY="20.0" text="Zaplanuj miesięczny limit wydatków:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="110.0" />
+      <TextField fx:id="usernameText" promptText="Nazwa profilu..." AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="30.0" />
+      <TextField fx:id="moneyText" layoutX="20.0" layoutY="40.0" promptText="Dostępne środki..." AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="80.0" />
+      <TextField fx:id="monthlyLimitText" layoutX="20.0" layoutY="40.0" promptText="Miesięczny limit..." AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="130.0" />
+      <Button fx:id="addUserButton" mnemonicParsing="false" onAction="#onAddUserButtonClicked" text="Dodaj profil" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="184.0" />
+      <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancelButtonClicked" text="Anuluj" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="184.0" />
+      <Label fx:id="warningLabel" alignment="CENTER" text="Uzupełnij nazwę profilu i dostępne środki!" textAlignment="CENTER" textFill="RED" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="160.0" />
+   </children>
+</AnchorPane>

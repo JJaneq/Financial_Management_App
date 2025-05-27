@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.edp.projekt.controller.MainController">
+   <children>
+      <MenuBar layoutX="-7.0" layoutY="1.0" prefHeight="25.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Profil">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Zmień profil" />
+                  <MenuItem mnemonicParsing="false" onAction="#onAddUser" text="Dodaj profil" />
+                  <MenuItem mnemonicParsing="false" text="Usuń profil" />
+                  <MenuItem mnemonicParsing="false" text="Edytuj profil" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Preferencje">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Tryb ciemny/jasny" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Pomoc" />
+        </menus>
+      </MenuBar>
+      <SplitPane dividerPositions="0.5" layoutX="200.0" layoutY="108.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <SplitPane dividerPositions="0.15" layoutX="75.0" layoutY="108.0" orientation="VERTICAL" prefHeight="373.0" prefWidth="296.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                              <Label fx:id="helloLabel" text="Utwórz profil" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="helloLabel1" layoutX="20.0" layoutY="20.0" text="Wydatki w tym miesiącu: /" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                              <Label layoutX="14.0" layoutY="14.0" text="Ostatnie wydatki:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                              <ScrollPane layoutX="29.0" layoutY="98.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                                </content>
+                              </ScrollPane>
+                              <Button fx:id="addUserButton" layoutX="14.0" layoutY="286.0" mnemonicParsing="false" onAction="#onAddUser" prefHeight="20.0" text="Dodaj" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <ScrollPane layoutX="25.0" layoutY="120.0" prefHeight="272.0" prefWidth="296.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                    </content>
+                  </ScrollPane>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
