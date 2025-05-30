@@ -12,7 +12,7 @@ public class MainApplication extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/com/edp/projekt/main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1080, 720);
-        stage.setTitle("Hello!");
+        stage.setTitle("Financial App");
         stage.setScene(scene);
         stage.show();
     }

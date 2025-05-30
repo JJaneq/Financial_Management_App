@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="100.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.edp.projekt.controller.UserDeleteController">
+   <children>
+      <Button mnemonicParsing="false" onAction="#onCancelButtonClicked" text="Anuluj" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="35.0" />
+      <Button mnemonicParsing="false" onAction="#onDeleteButtonClicked" style="-fx-background-color: #f52d0a;" text="USUŃ" textFill="WHITE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="35.0">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font></Button>
+      <Label alignment="CENTER" text="Uwaga!" textFill="RED" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+      <Label text="Czy na pewno chcesz usunąć profil?" textAlignment="CENTER" wrapText="true" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="30.0" />
+   </children>
+</AnchorPane>

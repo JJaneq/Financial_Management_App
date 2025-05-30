@@ -4,16 +4,16 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.edp.projekt.controller.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.edp.projekt.controller.MainController">
    <children>
       <MenuBar layoutX="-7.0" layoutY="1.0" prefHeight="25.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="Profil">
             <items>
-              <MenuItem mnemonicParsing="false" text="Zmień profil" />
                   <MenuItem mnemonicParsing="false" onAction="#onAddUser" text="Dodaj profil" />
-                  <MenuItem mnemonicParsing="false" text="Usuń profil" />
-                  <MenuItem mnemonicParsing="false" text="Edytuj profil" />
+              <MenuItem mnemonicParsing="false" onAction="#onChangeUser" text="Zmień profil" />
+                  <MenuItem fx:id="menuEdit" mnemonicParsing="false" onAction="#onEditUser" text="Edytuj profil" />
+                  <MenuItem fx:id="menuDelete" mnemonicParsing="false" onAction="#onDeleteUser" text="Usuń profil" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Preferencje">
@@ -37,7 +37,12 @@
                                     <Font size="16.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="helloLabel1" layoutX="20.0" layoutY="20.0" text="Wydatki w tym miesiącu: /" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0">
+                              <Label fx:id="moneyLabel" layoutX="20.0" layoutY="20.0" text="Dostępne środki: " AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="40.0">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="spendingLabel" layoutX="20.0" layoutY="20.0" text="Wydatki w tym miesiącu: /" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0">
                                  <font>
                                     <Font size="14.0" />
                                  </font>

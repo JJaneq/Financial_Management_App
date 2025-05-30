@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -64,5 +65,51 @@ public class UserDAO {
             logger.log(Level.SEVERE, "Cannot load user from database: " + e.getMessage(), e);
         }
         return null;
+    }
+
+    public static ArrayList<User> getAllUsers() {
+        String sql = "SELECT * FROM users";
+        ArrayList<User> users = new ArrayList<>();
+        try (Connection conn = DatabaseConnector.connect()) {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setUsername(rs.getString("username"));
+                user.setMoney(rs.getFloat("money"));
+                user.setMonthLimit(rs.getFloat("monthly_limit"));
+                users.add(user);
+            }
+            return users;
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Cannot load users from database: " + e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public static void deleteUser(int id) {
+        String sql = "DELETE FROM users WHERE id = ?";
+        try (Connection conn = DatabaseConnector.connect()) {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Cannot delete user from database: " + e.getMessage(), e);
+        }
+    }
+
+    public static void updateUser(int id, User newUser) {
+        String sql = "UPDATE users SET username = ?, money = ?, monthly_limit = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnector.connect()) {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, newUser.getUsername());
+            ps.setFloat(2, newUser.getMoney());
+            ps.setFloat(3, newUser.getMonthLimit());
+            ps.setInt(4, id);
+            ps.executeUpdate();
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Cannot update user from database: " + e.getMessage(), e);
+        }
     }
 }

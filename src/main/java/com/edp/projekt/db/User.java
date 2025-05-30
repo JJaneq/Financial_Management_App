@@ -37,4 +37,13 @@ public class User {
     public void setMonthLimit(float monthLimit) {
         this.monthLimit = monthLimit;
     }
+
+    @Override
+    public String toString() {
+        return username;
+    }
+
+    public float getCurrentMonthSpendings() {
+        return 0.0F;
+    }
 }

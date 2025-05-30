@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class UserCreationController {
+public class UserCreationController implements BasicController{
     @FXML
     Label warningLabel;
     @FXML
@@ -22,6 +22,7 @@ public class UserCreationController {
 
     MainController parentController;
 
+    @Override
     public void setParentController(MainController mainController) {
         this.parentController = mainController;
     }
