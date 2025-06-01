@@ -73,6 +73,7 @@ public class SpendingCreationController implements BasicController{
         newExpense.setCurrencySymbol(currencyChoiceBox.getValue());
         newExpense.setExpenseTime(datePicker.getValue().atStartOfDay());
         SpendingDAO.addSpending(newExpense);
+        parentController.updateSpendingInfoPane();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }

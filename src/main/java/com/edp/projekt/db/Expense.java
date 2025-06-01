@@ -66,4 +66,8 @@ public class Expense {
     public void setCurrencySymbol(String currencySymbol) {
         this.currencySymbol = currencySymbol;
     }
+
+    public String toString() {
+        return price + " " + currencySymbol + ": " + description + " - " + expenseTime.toLocalDate().toString();
+    }
 }

@@ -50,7 +50,8 @@ public class UserCreationController implements BasicController{
             UserDAO.addUser(newUser);
             newUser = UserDAO.getUser(newUser.getUsername());
             ServiceManager.saveLastUserId(newUser.getId());
-            parentController.updateUser();
+            parentController.updateUserInfoPane();
+            parentController.updateSpendingInfoPane();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.close();
         }

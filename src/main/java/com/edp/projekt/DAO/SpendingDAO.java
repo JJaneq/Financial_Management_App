@@ -14,7 +14,7 @@ public class SpendingDAO {
     private static final Logger logger = Logger.getLogger(SpendingDAO.class.getName());
 
     public static ArrayList<Expense> getSpendings(){
-        String sql = "SELECT * FROM expenses WHERE user_id = ?";
+        String sql = "SELECT * FROM expenses WHERE user_id = ? ORDER BY expense_time DESC";
         try (Connection conn = DatabaseConnector.connect()) {
             ArrayList<Expense> expenses = new ArrayList<>();
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -45,7 +45,7 @@ public class SpendingDAO {
     public static ArrayList<Expense> getSpendings(int months){
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime startTime = now.minusMonths(months);
-        String sql = "SELECT * FROM expenses WHERE expense_time BETWEEN ? AND ? AND user_id = ?";
+        String sql = "SELECT * FROM expenses WHERE expense_time BETWEEN ? AND ? AND user_id = ? ORDER BY expense_time DESC";
         try (Connection conn = DatabaseConnector.connect()) {
             ArrayList<Expense> expenses = new ArrayList<>();
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -70,6 +70,7 @@ public class SpendingDAO {
                 }
                 expenses.add(expense);
             }
+            return expenses;
         } catch (SQLException | ClassNotFoundException e) {
             logger.log(Level.SEVERE, "Error in getAllSpending: " + e.getMessage(), e);
         }

@@ -1,28 +1,37 @@
 package com.edp.projekt.controller;
 
+import com.edp.projekt.DAO.SpendingDAO;
+import com.edp.projekt.db.Expense;
 import com.edp.projekt.db.User;
 import com.edp.projekt.DAO.UserDAO;
 import com.edp.projekt.service.ServiceManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainController {
     @FXML
     private Label helloLabel, spendingLabel, moneyLabel;
     @FXML
     private MenuItem menuDelete, menuEdit;
+    @FXML
+    private VBox expensesVBox;
+
 
     @FXML
     private void initialize() {
-        updateUser();
+        updateUserInfoPane();
+        updateSpendingInfoPane();
     }
 
     @FXML
@@ -50,7 +59,7 @@ public class MainController {
         SpendingCreationController controller = createView("spending-creation-view");
     }
 
-    public void updateUser() {
+    public void updateUserInfoPane() {
         int currentUserId = ServiceManager.loadLastUserId();
         if (currentUserId > 0) {
             User currentUser = UserDAO.getUser(currentUserId);
@@ -71,6 +80,25 @@ public class MainController {
             moneyLabel.setVisible(false);
             menuDelete.setVisible(false);
             menuEdit.setVisible(false);
+        }
+    }
+
+    public void updateSpendingInfoPane() {
+        ArrayList<Expense> expenses = SpendingDAO.getSpendings(1);
+        VBox.setMargin(expensesVBox, new Insets(20, 0, 20, 0));
+        expensesVBox.setSpacing(15);
+        expensesVBox.getChildren().clear();
+        if (expenses.isEmpty()) {
+            Label label = new Label("Brak wydatków w ostatnim miesiącu :)");
+            label.setStyle("-fx-font-size: 16px");
+            expensesVBox.getChildren().add(label);
+        }
+        else {
+            for (Expense expense : expenses) {
+                Label label = new Label(expense.toString());
+                label.setStyle("-fx-font-size: 16px");
+                expensesVBox.getChildren().add(label);
+            }
         }
     }
 
