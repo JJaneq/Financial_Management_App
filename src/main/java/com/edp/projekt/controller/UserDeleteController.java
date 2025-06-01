@@ -1,7 +1,6 @@
 package com.edp.projekt.controller;
 
-import com.edp.projekt.db.User;
-import com.edp.projekt.db.UserDAO;
+import com.edp.projekt.DAO.UserDAO;
 import com.edp.projekt.service.ServiceManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

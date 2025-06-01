@@ -1,4 +1,7 @@
-package com.edp.projekt.db;
+package com.edp.projekt.DAO;
+
+import com.edp.projekt.db.DatabaseConnector;
+import com.edp.projekt.db.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,10 +22,8 @@ public class UserDAO {
             ps.setFloat(2, user.getMoney());
             ps.setFloat(3, user.getMonthLimit());
             ps.executeUpdate();
-
-            System.out.println("User " + user.getUsername() + " added");
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Cannot add user to database: " + e.getMessage(), e);
         }
     }
 

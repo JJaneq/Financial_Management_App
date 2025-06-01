@@ -13,4 +13,5 @@ module com.edp.projekt {
     opens com.edp.projekt.app to javafx.fxml;
     exports com.edp.projekt.controller;
     opens com.edp.projekt.controller to javafx.fxml;
+    exports com.edp.projekt.DAO;
 }

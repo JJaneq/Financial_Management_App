@@ -1,7 +1,7 @@
 package com.edp.projekt.controller;
 
 import com.edp.projekt.db.User;
-import com.edp.projekt.db.UserDAO;
+import com.edp.projekt.DAO.UserDAO;
 import com.edp.projekt.service.ServiceManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -43,6 +43,11 @@ public class MainController {
     @FXML
     private void onEditUser() throws IOException {
         UserEditController controller = createView("user-edit-view");
+    }
+
+    @FXML
+    private void onAddSpendingButtonClicked() throws IOException {
+        SpendingCreationController controller = createView("spending-creation-view");
     }
 
     public void updateUser() {
