@@ -39,7 +39,7 @@ public class UserChangeController implements BasicController{
     public void onChangeButtonClicked(ActionEvent event) {
         ServiceManager.saveLastUserId(UserDAO.getUser(userChoiceBox.getValue()).getId());
         parentController.updateUserInfoPane();
-        parentController.updateSpendingInfoPane();
+        parentController.updateTransactionsInfoPane();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }

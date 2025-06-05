@@ -4,9 +4,11 @@ module com.edp.projekt {
     requires io.github.cdimascio.dotenv.java;
     requires java.sql;
     requires mysql.connector.j;
+    requires java.net.http;
 
 
     opens com.edp.projekt to javafx.fxml;
+    opens com.edp.projekt.components to javafx.fxml;
     exports com.edp.projekt.app;
     exports com.edp.projekt.db;
     exports com.edp.projekt.service;

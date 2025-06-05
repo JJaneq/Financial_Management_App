@@ -51,6 +51,26 @@ public class CategoryDAO {
         return null;
     }
 
+    public static ArrayList<Categories> getAllByType(String type){
+        String sql = "SELECT * FROM categories WHERE type = ?";
+        try (Connection conn = DatabaseConnector.connect()) {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, type);
+            ResultSet rs = ps.executeQuery();
+            ArrayList<Categories> categories = new ArrayList<>();
+            while(rs.next()){
+                Categories category = new Categories();
+                category.setId(rs.getInt("id"));
+                category.setName(rs.getString("name"));
+                categories.add(category);
+            }
+            return categories;
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Error in getAll: " + e.getMessage(), e);
+        }
+        return null;
+    }
+
     public static int getCategoryId(String name) {
         String sql = "SELECT * FROM categories WHERE name = ?";
         try (Connection conn = DatabaseConnector.connect()) {

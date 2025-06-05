@@ -44,7 +44,7 @@ public class UserEditController implements BasicController{
         UserDAO.updateUser(ServiceManager.loadLastUserId(), newUser);
 
         parentController.updateUserInfoPane();
-        parentController.updateSpendingInfoPane();
+        parentController.updateTransactionsInfoPane();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }

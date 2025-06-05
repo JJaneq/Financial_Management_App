@@ -2,6 +2,7 @@ package com.edp.projekt.DAO;
 
 import com.edp.projekt.db.DatabaseConnector;
 import com.edp.projekt.db.User;
+import javafx.scene.chart.PieChart;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +16,7 @@ public class UserDAO {
     private static final Logger logger = Logger.getLogger(UserDAO.class.getName());
 
     public static void addUser(User user) {
-        String sql = "INSERT INTO users (username, money, monthly_limit) VALUES (?,?,?)";
+        String sql = "INSERT INTO users (username, money, month_limit) VALUES (?,?,?)";
         try (Connection conn = DatabaseConnector.connect();) {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, user.getUsername());
@@ -36,9 +37,10 @@ public class UserDAO {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 User user = new User();
+                user.setId(rs.getInt("id"));
                 user.setUsername(rs.getString("username"));
                 user.setMoney(rs.getFloat("money"));
-                user.setMonthLimit(rs.getFloat("monthly_limit"));
+                user.setMonthLimit(rs.getFloat("month_limit"));
                 return user;
             }
         } catch (SQLException | ClassNotFoundException e) {
@@ -59,7 +61,7 @@ public class UserDAO {
                 user.setId(rs.getInt("id"));
                 user.setUsername(rs.getString("username"));
                 user.setMoney(rs.getFloat("money"));
-                user.setMonthLimit(rs.getFloat("monthly_limit"));
+                user.setMonthLimit(rs.getFloat("month_limit"));
                 return user;
             }
         } catch (SQLException | ClassNotFoundException e) {
@@ -79,7 +81,7 @@ public class UserDAO {
                 user.setId(rs.getInt("id"));
                 user.setUsername(rs.getString("username"));
                 user.setMoney(rs.getFloat("money"));
-                user.setMonthLimit(rs.getFloat("monthly_limit"));
+                user.setMonthLimit(rs.getFloat("month_limit"));
                 users.add(user);
             }
             return users;
@@ -101,7 +103,7 @@ public class UserDAO {
     }
 
     public static void updateUser(int id, User newUser) {
-        String sql = "UPDATE users SET username = ?, money = ?, monthly_limit = ? WHERE id = ?";
+        String sql = "UPDATE users SET username = ?, money = ?, month_limit = ? WHERE id = ?";
         try (Connection conn = DatabaseConnector.connect()) {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, newUser.getUsername());
@@ -111,6 +113,22 @@ public class UserDAO {
             ps.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
             logger.log(Level.SEVERE, "Cannot update user from database: " + e.getMessage(), e);
+        }
+    }
+
+    public static void changeUser(User user) {
+        String sql = "UPDATE users SET money = ?, month_limit = ? WHERE id = ?";
+        System.out.println("User:" + user.getId());
+        try (Connection conn = DatabaseConnector.connect()) {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setFloat(1, user.getMoney());
+            ps.setFloat(2, user.getMonthLimit());
+            ps.setInt(3, user.getId());
+            ps.executeUpdate();
+            ResultSet rs = ps.executeQuery("SELECT money FROM users WHERE id = 0");
+            System.out.println(rs.getFloat("money"));
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Error in changeUser: " + e.getMessage(), e);
         }
     }
 }

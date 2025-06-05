@@ -21,7 +21,7 @@ public class UserDeleteController implements BasicController{
         ServiceManager.saveLastUserId(-1);
 
         parentController.updateUserInfoPane();
-        parentController.updateSpendingInfoPane();
+        parentController.updateTransactionsInfoPane();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }

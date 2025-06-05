@@ -2,7 +2,7 @@ package com.edp.projekt.db;
 
 import java.time.LocalDateTime;
 
-public class Expense {
+public class Transaction {
     private int id;
     private int userId;
     private int categoryId;
@@ -10,6 +10,7 @@ public class Expense {
     private LocalDateTime expenseTime;
     private String description;
     private String currencySymbol;
+    private String type;
 
     public int getId() {
         return id;
@@ -65,6 +66,14 @@ public class Expense {
 
     public void setCurrencySymbol(String currencySymbol) {
         this.currencySymbol = currencySymbol;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String toString() {

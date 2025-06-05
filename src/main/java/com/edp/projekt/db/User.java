@@ -1,5 +1,7 @@
 package com.edp.projekt.db;
 
+import com.edp.projekt.DAO.UserDAO;
+
 public class User {
     private int id;
     private String username;
@@ -45,5 +47,13 @@ public class User {
 
     public float getCurrentMonthSpendings() {
         return 0.0F;
+    }
+
+    public void handleTransaction(Transaction transaction) {
+        if (transaction.getType().equals("expense"))
+            this.money -= transaction.getPrice();
+        else if (transaction.getType().equals("income"))
+            this.money += transaction.getPrice();
+        UserDAO.updateUser(this.id, this);
     }
 }

@@ -1,9 +1,11 @@
 package com.edp.projekt.controller;
 
-import com.edp.projekt.DAO.SpendingDAO;
-import com.edp.projekt.db.Expense;
+import com.edp.projekt.DAO.TransactionDAO;
+import com.edp.projekt.components.BudgetIndicator;
+import com.edp.projekt.db.Transaction;
 import com.edp.projekt.db.User;
 import com.edp.projekt.DAO.UserDAO;
+import com.edp.projekt.external_api.FinancialApi;
 import com.edp.projekt.service.ServiceManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +20,7 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MainController {
     @FXML
@@ -26,12 +29,14 @@ public class MainController {
     private MenuItem menuDelete, menuEdit;
     @FXML
     private VBox expensesVBox;
+    @FXML
+    private BudgetIndicator budgetIndicator;
 
 
     @FXML
     private void initialize() {
         updateUserInfoPane();
-        updateSpendingInfoPane();
+        updateTransactionsInfoPane();
     }
 
     @FXML
@@ -59,6 +64,17 @@ public class MainController {
         SpendingCreationController controller = createView("spending-creation-view");
     }
 
+    @FXML
+    private void onFinancialButtonClicked() throws IOException, InterruptedException {
+        System.out.println("Financial button clicked");
+        System.out.println(FinancialApi.getFinancialData("CDR", 'd'));
+    }
+
+    @FXML
+    private void onAddProfitButtonClicked() throws IOException, InterruptedException {
+        ProfitCreationController controller = createView("profit-creation-view");
+    }
+
     public void updateUserInfoPane() {
         int currentUserId = ServiceManager.loadLastUserId();
         if (currentUserId > 0) {
@@ -74,6 +90,8 @@ public class MainController {
             moneyLabel.setVisible(true);
             menuDelete.setVisible(true);
             menuEdit.setVisible(true);
+
+            //TODO: aktualizuj wydatki na komponencie - potrzeba metody sprawdzającej miesięczne wydatki w DAO + wybierz api do stocka
         } else {
             helloLabel.setText("Wybierz istniejący profil lub utwórz nowy");
             spendingLabel.setVisible(false);
@@ -83,8 +101,8 @@ public class MainController {
         }
     }
 
-    public void updateSpendingInfoPane() {
-        ArrayList<Expense> expenses = SpendingDAO.getSpendings(1);
+    public void updateTransactionsInfoPane() {
+        ArrayList<Transaction> expenses = TransactionDAO.getAllTransactions(1);
         VBox.setMargin(expensesVBox, new Insets(20, 0, 20, 0));
         expensesVBox.setSpacing(15);
         expensesVBox.getChildren().clear();
@@ -94,9 +112,13 @@ public class MainController {
             expensesVBox.getChildren().add(label);
         }
         else {
-            for (Expense expense : expenses) {
+            for (Transaction expense : expenses) {
                 Label label = new Label(expense.toString());
-                label.setStyle("-fx-font-size: 16px");
+                if (Objects.equals(expense.getType(), "income")) {
+                    label.setStyle("-fx-font-size: 16px; -fx-text-fill: green;");
+                }
+                else if (Objects.equals(expense.getType(), "expense"))
+                    label.setStyle("-fx-font-size: 16px; -fx-text-fill: red;");
                 expensesVBox.getChildren().add(label);
             }
         }

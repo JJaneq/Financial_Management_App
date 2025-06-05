@@ -20,7 +20,7 @@ import javafx.stage.Stage;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class SpendingCreationController implements BasicController{
+public class ProfitCreationController implements BasicController{
     MainController parentController;
 
     @FXML
@@ -34,11 +34,11 @@ public class SpendingCreationController implements BasicController{
 
     @FXML
     private void initialize() {
-        ArrayList<Categories> categories = CategoryDAO.getAllByType("expense");
+        ArrayList<Categories> categories = CategoryDAO.getAllByType("income");
+        datePicker.setValue(LocalDate.now());
         for (Categories category : categories) {
             categoryChoiceBox.getItems().add(category.toString());
         }
-        datePicker.setValue(LocalDate.now());
         categoryChoiceBox.setValue(categories.get(0).toString());
         currencyChoiceBox.getItems().add("EUR");
         currencyChoiceBox.getItems().add("USD");
@@ -75,12 +75,12 @@ public class SpendingCreationController implements BasicController{
         newExpense.setUserId(ServiceManager.loadLastUserId());
         newExpense.setCurrencySymbol(currencyChoiceBox.getValue());
         newExpense.setExpenseTime(datePicker.getValue().atStartOfDay());
-        newExpense.setType("expense");
+        newExpense.setType("income");
         TransactionDAO.addTransaction(newExpense);
         User user = UserDAO.getUser(ServiceManager.loadLastUserId());
         user.handleTransaction(newExpense);
-        parentController.updateUserInfoPane();
         parentController.updateTransactionsInfoPane();
+        parentController.updateUserInfoPane();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
