@@ -45,10 +45,6 @@ public class User {
         return username;
     }
 
-    public float getCurrentMonthSpendings() {
-        return 0.0F;
-    }
-
     public void handleTransaction(Transaction transaction) {
         if (transaction.getType().equals("expense"))
             this.money -= transaction.getPrice();

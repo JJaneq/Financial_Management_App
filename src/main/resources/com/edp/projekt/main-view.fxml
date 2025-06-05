@@ -56,8 +56,11 @@
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
-                              <Label layoutX="14.0" layoutY="14.0" text="Ostatnie wydatki:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
-                              <ScrollPane fitToHeight="true" fitToWidth="true" layoutY="84.0" prefHeight="500.0" prefWidth="534.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="84.0">
+                              <Label layoutX="14.0" layoutY="14.0" text="Ostatnie wydatki:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                 <font>
+                                    <Font name="System Bold Italic" size="16.0" />
+                                 </font></Label>
+                              <ScrollPane fitToHeight="true" fitToWidth="true" layoutY="84.0" prefHeight="500.0" prefWidth="534.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
                                  <content>
                                     <AnchorPane>
                                        <children>

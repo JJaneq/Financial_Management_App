@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -81,11 +82,14 @@ public class MainController {
             User currentUser = UserDAO.getUser(currentUserId);
             helloLabel.setText(currentUser.getUsername() + ", witaj!");
             moneyLabel.setText(currentUser.getMoney() + "");
-            if (currentUser.getMonthLimit() > 0.0)
-                spendingLabel.setText("Wydatki w tym miesiącu: " + currentUser.getCurrentMonthSpendings()
+            double totalSpending = TransactionDAO.totalSpendingInMonth(LocalDate.now().getMonthValue(), LocalDate.now().getYear());
+            if (currentUser.getMonthLimit() > 0.0) {
+                spendingLabel.setText("Wydatki w tym miesiącu: " + totalSpending
                         + "/" + currentUser.getMonthLimit() + "PLN");
+                budgetIndicator.setSpendingValue(totalSpending, currentUser.getMonthLimit());
+            }
             else
-                spendingLabel.setText("Wydatki w tym miesiącu: " + currentUser.getCurrentMonthSpendings() + "PLN");
+                spendingLabel.setText("Wydatki w tym miesiącu: " + totalSpending + "PLN");
             spendingLabel.setVisible(true);
             moneyLabel.setVisible(true);
             menuDelete.setVisible(true);

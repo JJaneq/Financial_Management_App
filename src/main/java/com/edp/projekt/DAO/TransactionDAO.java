@@ -173,7 +173,25 @@ public class TransactionDAO {
         }
     }
 
-//    public static float totalSpendingInMonth(int month, int year){
-//
-//    }
+    public static float totalSpendingInMonth(int month, int year){
+        LocalDate startTime = LocalDate.of(year, month, 1);
+        LocalDate endTime = startTime.withDayOfMonth(startTime.lengthOfMonth());
+        Timestamp startTimestamp = Timestamp.valueOf(startTime.atStartOfDay());
+        Timestamp endTimestamp = Timestamp.valueOf(endTime.atTime(23, 59, 59));
+
+        String sql = "SELECT SUM(price) AS sum_price FROM transactions WHERE expense_time BETWEEN ? AND ? AND user_id = ?";
+        try (Connection conn = DatabaseConnector.connect()) {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setTimestamp(1, startTimestamp);
+            ps.setTimestamp(2, endTimestamp);
+            ps.setInt(3, ServiceManager.loadLastUserId());
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getFloat("sum_price");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Error in totalSpendingInMonth: " + e.getMessage(), e);
+        }
+        return 0.0F;
+    }
 }
