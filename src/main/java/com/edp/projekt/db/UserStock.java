@@ -7,6 +7,13 @@ public class UserStock {
     private float purchasePrice;
     private int quantity;
 
+    public UserStock(int userId, int stockId, float purchasePrice, int quantity) {
+        this.id = 0;
+        this.userId = userId;
+        this.stockId = stockId;
+        this.purchasePrice = purchasePrice;
+        this.quantity = quantity;
+    }
 
     public int getQuantity() {
         return quantity;

@@ -5,6 +5,8 @@ module com.edp.projekt {
     requires java.sql;
     requires mysql.connector.j;
     requires java.net.http;
+    requires org.json;
+    requires java.desktop;
 
 
     opens com.edp.projekt to javafx.fxml;

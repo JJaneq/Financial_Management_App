@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="280.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.edp.projekt.controller.StockAddController">
+
+    <children>
+
+        <VBox alignment="TOP_CENTER" spacing="15" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
+
+            <!-- Tytuł -->
+            <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Dodaj akcję" />
+
+            <!-- Symbol akcji -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label minWidth="100" text="Symbol:" />
+                <TextField fx:id="symbolField" promptText="np. AAPL" />
+            </HBox>
+
+            <!-- Cena zakupu -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label minWidth="100" text="Cena za akcję:" />
+                <TextField fx:id="priceField" promptText="np. 150.50" />
+            </HBox>
+
+            <!-- Waluta -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label minWidth="100" text="Waluta:" />
+                <ComboBox fx:id="currencyComboBox" prefWidth="100">
+                </ComboBox>
+            </HBox>
+
+            <!-- Ilość akcji -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label minWidth="100" text="Ilość:" />
+                <Spinner fx:id="quantitySpinner" prefWidth="100" />
+            </HBox>
+            <Label fx:id="errorLabel" managed="false" text="Wprowadź poprawne dane!" textFill="red" visible="false" />
+            <!-- Przyciski -->
+            <HBox alignment="CENTER" spacing="20">
+                <Button onAction="#onAddButtonClicked" text="Zapisz" />
+                <Button onAction="#onCancelButtonClicked" text="Anuluj" />
+            </HBox>
+
+        </VBox>
+
+    </children>
+
+</AnchorPane>

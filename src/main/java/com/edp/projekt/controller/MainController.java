@@ -1,5 +1,6 @@
 package com.edp.projekt.controller;
 
+import com.edp.projekt.DAO.StockPriceDAO;
 import com.edp.projekt.DAO.TransactionDAO;
 import com.edp.projekt.components.BudgetIndicator;
 import com.edp.projekt.db.Transaction;
@@ -38,6 +39,7 @@ public class MainController {
     private void initialize() {
         updateUserInfoPane();
         updateTransactionsInfoPane();
+        StockPriceDAO.updateStockPrices();
     }
 
     @FXML
@@ -67,8 +69,9 @@ public class MainController {
 
     @FXML
     private void onFinancialButtonClicked() throws IOException, InterruptedException {
-        System.out.println("Financial button clicked");
-        System.out.println(FinancialApi.getFinancialData("CDR", 'd'));
+//        System.out.println("Financial button clicked");
+//        System.out.println(FinancialApi.getFinancialData("IBM", "5min"));
+        StockAddController controller = createView("stock-add-view");
     }
 
     @FXML
