@@ -93,10 +93,12 @@ public class StockAddController implements BasicController{
                     ServiceManager.loadLastUserId(),
                     stock.getId(),
                     price,
-                    quantitySpinner.getValue()
+                    quantitySpinner.getValue(),
+                    currencyComboBox.getValue()
             );
             UserStockDAO.addUserStock(userStock);
 
+            parentController.updateMainScreen();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.close();
         }

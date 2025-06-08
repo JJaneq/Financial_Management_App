@@ -79,8 +79,7 @@ public class SpendingCreationController implements BasicController{
         TransactionDAO.addTransaction(newExpense);
         User user = UserDAO.getUser(ServiceManager.loadLastUserId());
         user.handleTransaction(newExpense);
-        parentController.updateUserInfoPane();
-        parentController.updateTransactionsInfoPane();
+        parentController.updateMainScreen();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }

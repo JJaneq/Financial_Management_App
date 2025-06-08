@@ -160,4 +160,82 @@ public class StockPriceDAO {
             }
         }, 0, 1, TimeUnit.HOURS);
     }
+
+    public static ArrayList<StockPrice> getStockData(String stockSymbol) {
+        String sql = "SELECT * FROM stock_prices WHERE stock_id = ?";
+        ArrayList<StockPrice> stockPrices = new ArrayList<>();
+        try (Connection conn = DatabaseConnector.connect()) {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, StockDAO.getStock(stockSymbol).getId());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                StockPrice stockPrice = new StockPrice();
+                stockPrice.setId(rs.getInt("id"));
+                stockPrice.setStockId(rs.getInt("stock_id"));
+                stockPrice.setOpen(rs.getDouble("open"));
+                stockPrice.setHigh(rs.getDouble("high"));
+                stockPrice.setLow(rs.getDouble("low"));
+                stockPrice.setClose(rs.getDouble("close"));
+                stockPrice.setVolume(rs.getLong("volume"));
+                Timestamp stock_time = rs.getTimestamp("stock_time");
+                stockPrice.setStockTime(stock_time.toLocalDateTime());
+                stockPrices.add(stockPrice);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Error in getStockData: " + e.getMessage());
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return stockPrices;
+    }
+
+    public static ArrayList<StockPrice> getStockData(String stockSymbol, int days) {
+        String sql = "SELECT * FROM stock_prices WHERE stock_id = ? " +
+                "AND stock_time BETWEEN ? AND ?";
+        ArrayList<StockPrice> stockPrices = new ArrayList<>();
+        LocalDate now = LocalDate.now();
+        LocalDate begin = now.minusDays(days);
+
+        try (Connection conn = DatabaseConnector.connect()) {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, StockDAO.getStock(stockSymbol).getId());
+            ps.setTimestamp(2, Timestamp.valueOf(begin.atStartOfDay()));
+            ps.setTimestamp(3, Timestamp.valueOf(now.atStartOfDay()));
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                StockPrice stockPrice = new StockPrice();
+                stockPrice.setId(rs.getInt("id"));
+                stockPrice.setStockId(rs.getInt("stock_id"));
+                stockPrice.setOpen(rs.getDouble("open"));
+                stockPrice.setHigh(rs.getDouble("high"));
+                stockPrice.setLow(rs.getDouble("low"));
+                stockPrice.setClose(rs.getDouble("close"));
+                stockPrice.setVolume(rs.getLong("volume"));
+                Timestamp stock_time = rs.getTimestamp("stock_time");
+                stockPrice.setStockTime(stock_time.toLocalDateTime());
+                stockPrices.add(stockPrice);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Error in getStockData: " + e.getMessage());
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return stockPrices;
+    }
+
+    public static float getLatestPrice(int stockId) {
+        String sql = "SELECT * FROM stock_prices WHERE stock_id = ? ORDER BY stock_time DESC LIMIT 1";
+        float latestPrice = 0F;
+        try (Connection conn = DatabaseConnector.connect()) {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, stockId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                latestPrice = Float.parseFloat(rs.getString("close"));
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Error in getLatestPrice: " + e.getMessage());
+        }
+        return latestPrice;
+    }
 }

@@ -14,6 +14,8 @@ public class StockPrice {
     private double low;
     private double volume;
 
+    public StockPrice() {}
+
     public StockPrice(int stockId, LocalDateTime stockTime, double open, double close, double high, double low, double volume) {
         this.stockId = stockId;
         this.stockTime = stockTime;

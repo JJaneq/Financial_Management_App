@@ -2,10 +2,13 @@ package com.edp.projekt.controller;
 
 import com.edp.projekt.DAO.StockPriceDAO;
 import com.edp.projekt.DAO.TransactionDAO;
+import com.edp.projekt.DAO.UserStockDAO;
 import com.edp.projekt.components.BudgetIndicator;
+import com.edp.projekt.components.StockChart;
 import com.edp.projekt.db.Transaction;
 import com.edp.projekt.db.User;
 import com.edp.projekt.DAO.UserDAO;
+import com.edp.projekt.db.UserStock;
 import com.edp.projekt.external_api.FinancialApi;
 import com.edp.projekt.service.ServiceManager;
 import javafx.fxml.FXML;
@@ -30,15 +33,17 @@ public class MainController {
     @FXML
     private MenuItem menuDelete, menuEdit;
     @FXML
-    private VBox expensesVBox;
+    private VBox expensesVBox, stocksVBox;
     @FXML
     private BudgetIndicator budgetIndicator;
+    @FXML
+    private StockChart stockChart;
 
 
     @FXML
     private void initialize() {
-        updateUserInfoPane();
-        updateTransactionsInfoPane();
+        updateMainScreen();
+        stockChart.setSymbol("CDR");
         StockPriceDAO.updateStockPrices();
     }
 
@@ -68,15 +73,26 @@ public class MainController {
     }
 
     @FXML
-    private void onFinancialButtonClicked() throws IOException, InterruptedException {
+    private void onBuyButtonClicked() throws IOException, InterruptedException {
 //        System.out.println("Financial button clicked");
 //        System.out.println(FinancialApi.getFinancialData("IBM", "5min"));
         StockAddController controller = createView("stock-add-view");
     }
 
     @FXML
+    private void onSellButtonClicked() throws IOException, InterruptedException {
+        StockSellController controller = createView("stock-sell-view");
+    }
+
+    @FXML
     private void onAddProfitButtonClicked() throws IOException, InterruptedException {
         ProfitCreationController controller = createView("profit-creation-view");
+    }
+
+    public void updateMainScreen() {
+        updateUserInfoPane();
+        updateTransactionsInfoPane();
+        updateUserStockInfoPane();
     }
 
     public void updateUserInfoPane() {
@@ -127,6 +143,25 @@ public class MainController {
                 else if (Objects.equals(expense.getType(), "expense"))
                     label.setStyle("-fx-font-size: 16px; -fx-text-fill: red;");
                 expensesVBox.getChildren().add(label);
+            }
+        }
+    }
+
+    public void updateUserStockInfoPane() {
+        ArrayList<UserStock> stocks = UserStockDAO.getUserStocks(ServiceManager.loadLastUserId());
+        VBox.setMargin(stocksVBox, new Insets(20, 0, 20, 0));
+        stocksVBox.setSpacing(15);
+        stocksVBox.getChildren().clear();
+        if (stocks.isEmpty()) {
+            Label label = new Label("Brak posiadanych akcji");
+            label.setStyle("-fx-font-size: 16px");
+            stocksVBox.getChildren().add(label);
+        }
+        else {
+            for (UserStock stock : stocks) {
+                Label label = new Label(stock.toString());
+                label.setStyle("-fx-font-size: 16px");
+                stocksVBox.getChildren().add(label);
             }
         }
     }

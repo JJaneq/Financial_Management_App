@@ -20,8 +20,7 @@ public class UserDeleteController implements BasicController{
         UserDAO.deleteUser(ServiceManager.loadLastUserId());
         ServiceManager.saveLastUserId(-1);
 
-        parentController.updateUserInfoPane();
-        parentController.updateTransactionsInfoPane();
+        parentController.updateMainScreen();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }

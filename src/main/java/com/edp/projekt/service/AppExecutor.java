@@ -18,5 +18,6 @@ public class AppExecutor {
 
     public static void shutdown() {
         executor.shutdown();
+        scheduler.shutdown();
     }
 }

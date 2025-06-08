@@ -38,8 +38,7 @@ public class UserChangeController implements BasicController{
     @FXML
     public void onChangeButtonClicked(ActionEvent event) {
         ServiceManager.saveLastUserId(UserDAO.getUser(userChoiceBox.getValue()).getId());
-        parentController.updateUserInfoPane();
-        parentController.updateTransactionsInfoPane();
+        parentController.updateMainScreen();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }

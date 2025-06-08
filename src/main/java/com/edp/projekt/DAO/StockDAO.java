@@ -80,4 +80,20 @@ public class StockDAO {
         }
         return stocks;
     }
+
+    public static String getStockSymbol(int stockId) {
+        String sql = "SELECT * FROM stocks WHERE id = ?";
+        String stockSymbol = null;
+        try (Connection conn = DatabaseConnector.connect()) {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, stockId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                stockSymbol = rs.getString("stock_symbol");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Error in getStockSymbol" + e.getMessage());
+        }
+        return stockSymbol;
+    }
 }

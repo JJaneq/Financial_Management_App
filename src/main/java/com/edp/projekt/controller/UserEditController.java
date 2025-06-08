@@ -43,8 +43,7 @@ public class UserEditController implements BasicController{
         newUser.setMonthLimit(Float.parseFloat(monthlyLimitTextField.getText()));
         UserDAO.updateUser(ServiceManager.loadLastUserId(), newUser);
 
-        parentController.updateUserInfoPane();
-        parentController.updateTransactionsInfoPane();
+        parentController.updateMainScreen();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }

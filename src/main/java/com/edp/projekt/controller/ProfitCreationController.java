@@ -79,8 +79,7 @@ public class ProfitCreationController implements BasicController{
         TransactionDAO.addTransaction(newExpense);
         User user = UserDAO.getUser(ServiceManager.loadLastUserId());
         user.handleTransaction(newExpense);
-        parentController.updateTransactionsInfoPane();
-        parentController.updateUserInfoPane();
+        parentController.updateMainScreen();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
