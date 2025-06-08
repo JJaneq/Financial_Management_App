@@ -1,14 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.edp.projekt.controller.StockSellController"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="280.0" prefWidth="350.0"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.edp.projekt.controller.StockSellController">
+
+    <children>
+
+        <VBox alignment="TOP_CENTER" spacing="15"
+              AnchorPane.leftAnchor="20"
+              AnchorPane.rightAnchor="20"
+              AnchorPane.topAnchor="20">
+
+            <!-- Tytuł -->
+            <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Sprzedaj akcję" />
+
+            <!-- Wybór akcji -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label minWidth="100" text="Symbol:" />
+                <ChoiceBox fx:id="stockChoiceBox" prefWidth="150" />
+            </HBox>
+
+            <!-- Cena zakupu -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label minWidth="100" text="Cena zakupu:" />
+                <Label fx:id="purchasePriceLabel" text="-" />
+            </HBox>
+
+            <!-- Obecna cena -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label minWidth="100" text="Obecna cena:" />
+                <Label fx:id="currentPriceLabel" text="-" />
+            </HBox>
+
+            <!-- Ilość do sprzedaży -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label minWidth="100" text="Ilość:" />
+                <Spinner fx:id="quantitySpinner" prefWidth="100" />
+            </HBox>
+
+            <!-- Komunikat o błędzie -->
+            <Label fx:id="errorLabel" managed="false" text="Wybierz akcję i ilość!" textFill="red" visible="false" />
+
+            <!-- Przyciski -->
+            <HBox alignment="CENTER" spacing="20">
+                <Button onAction="#onSellButtonClicked" text="Sprzedaj" />
+                <Button onAction="#onCancelButtonClicked" text="Anuluj" />
+            </HBox>
+
+        </VBox>
+
+    </children>
 
 </AnchorPane>

@@ -1,9 +1,9 @@
 package com.edp.projekt.controller;
 
-import com.edp.projekt.DAO.UserStockDAO;
+import com.edp.projekt.DAO.*;
 import com.edp.projekt.db.Stock;
+import com.edp.projekt.db.Transaction;
 import com.edp.projekt.db.UserStock;
-import com.edp.projekt.DAO.StockDAO;
 import com.edp.projekt.service.ServiceManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 public class StockAddController implements BasicController{
     MainController parentController;
@@ -97,6 +98,16 @@ public class StockAddController implements BasicController{
                     currencyComboBox.getValue()
             );
             UserStockDAO.addUserStock(userStock);
+
+            Transaction transaction = new Transaction();
+            transaction.setType("expense");
+            transaction.setExpenseTime(LocalDateTime.now());
+            transaction.setUserId(ServiceManager.loadLastUserId());
+            transaction.setCategoryId(CategoryDAO.getCategoryId("Inwestycje"));
+            transaction.setCurrencySymbol(userStock.getCurrency());
+            transaction.setDescription(StockDAO.getStockSymbol(userStock.getStockId()) + " : " + quantitySpinner.getValue());
+            transaction.setPrice(quantitySpinner.getValue() * StockPriceDAO.getLatestPrice(userStock.getStockId()));
+            TransactionDAO.addTransaction(transaction);
 
             parentController.updateMainScreen();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

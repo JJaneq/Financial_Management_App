@@ -3,6 +3,9 @@ package com.edp.projekt.db;
 import com.edp.projekt.DAO.StockDAO;
 import com.edp.projekt.DAO.StockPriceDAO;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class UserStock {
     private int id;
     private int userId;
@@ -11,6 +14,16 @@ public class UserStock {
     private int quantity;
     private String currency;
     private final float totalPrice;
+
+    public UserStock(int id, int userId, int stockId, float purchasePrice, int quantity, String currency) {
+        this.id = id;
+        this.userId = userId;
+        this.stockId = stockId;
+        this.purchasePrice = purchasePrice;
+        this.quantity = quantity;
+        this.currency = currency;
+        this.totalPrice = purchasePrice * quantity;
+    }
 
     public UserStock(int userId, int stockId, float purchasePrice, int quantity, String currency) {
         this.id = 0;

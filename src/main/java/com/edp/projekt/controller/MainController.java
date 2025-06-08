@@ -49,44 +49,49 @@ public class MainController {
 
     @FXML
     private void onAddUser() throws IOException {
-        UserCreationController controller = createView("user-creation-view");
+        UserCreationController controller = createView("user-creation-view", false);
     }
 
     @FXML
     private void onChangeUser() throws IOException {
-        UserChangeController controller = createView("user-change-view");
+        UserChangeController controller = createView("user-change-view", false);
     }
 
     @FXML
     private void onDeleteUser() throws IOException {
-        UserDeleteController controller = createView("user-delete-view");
+        UserDeleteController controller = createView("user-delete-view", false);
     }
 
     @FXML
     private void onEditUser() throws IOException {
-        UserEditController controller = createView("user-edit-view");
+        UserEditController controller = createView("user-edit-view", false);
     }
 
     @FXML
     private void onAddSpendingButtonClicked() throws IOException {
-        SpendingCreationController controller = createView("spending-creation-view");
+        SpendingCreationController controller = createView("spending-creation-view", false);
     }
 
     @FXML
     private void onBuyButtonClicked() throws IOException, InterruptedException {
 //        System.out.println("Financial button clicked");
 //        System.out.println(FinancialApi.getFinancialData("IBM", "5min"));
-        StockAddController controller = createView("stock-add-view");
+        StockAddController controller = createView("stock-add-view", false);
     }
 
     @FXML
     private void onSellButtonClicked() throws IOException, InterruptedException {
-        StockSellController controller = createView("stock-sell-view");
+        StockSellController controller = createView("stock-sell-view", false);
     }
 
     @FXML
     private void onAddProfitButtonClicked() throws IOException, InterruptedException {
-        ProfitCreationController controller = createView("profit-creation-view");
+        ProfitCreationController controller = createView("profit-creation-view", false);
+    }
+
+    @FXML
+    private void onDetailButtonClicked() throws IOException, InterruptedException {
+        ExpensePieChartController controller = createView("expense-pie-chart-view", true);
     }
 
     public void updateMainScreen() {
@@ -95,7 +100,7 @@ public class MainController {
         updateUserStockInfoPane();
     }
 
-    public void updateUserInfoPane() {
+    private void updateUserInfoPane() {
         int currentUserId = ServiceManager.loadLastUserId();
         if (currentUserId > 0) {
             User currentUser = UserDAO.getUser(currentUserId);
@@ -124,7 +129,9 @@ public class MainController {
         }
     }
 
-    public void updateTransactionsInfoPane() {
+
+
+    private void updateTransactionsInfoPane() {
         ArrayList<Transaction> expenses = TransactionDAO.getAllTransactions(1);
         VBox.setMargin(expensesVBox, new Insets(20, 0, 20, 0));
         expensesVBox.setSpacing(15);
@@ -147,7 +154,7 @@ public class MainController {
         }
     }
 
-    public void updateUserStockInfoPane() {
+    private void updateUserStockInfoPane() {
         ArrayList<UserStock> stocks = UserStockDAO.getUserStocks(ServiceManager.loadLastUserId());
         VBox.setMargin(stocksVBox, new Insets(20, 0, 20, 0));
         stocksVBox.setSpacing(15);
@@ -166,7 +173,7 @@ public class MainController {
         }
     }
 
-    private <T extends BasicController> T createView(String loaderView) throws IOException {
+    private <T extends BasicController> T createView(String loaderView, boolean decorated) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/edp/projekt/" + loaderView + ".fxml"));
         Parent root = loader.load();
 
@@ -175,7 +182,8 @@ public class MainController {
 
         Stage newStage = new Stage();
         newStage.setScene(new Scene(root));
-        newStage.initStyle(StageStyle.UNDECORATED);
+        if (!decorated)
+            newStage.initStyle(StageStyle.UNDECORATED);
         newStage.showAndWait();
 
         return controller;

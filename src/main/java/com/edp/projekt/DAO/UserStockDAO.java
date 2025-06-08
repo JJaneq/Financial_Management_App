@@ -3,10 +3,8 @@ package com.edp.projekt.DAO;
 import com.edp.projekt.db.DatabaseConnector;
 import com.edp.projekt.db.UserStock;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,6 +27,49 @@ public class UserStockDAO {
         }
     }
 
+    public static void editUserStock(UserStock userStock) {
+        String sql = "UPDATE user_stocks SET purchase_price = ?, quantity = ?, currency = ? WHERE id = ?";
+
+        try (Connection conn = DatabaseConnector.connect()) {
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setDouble(1, userStock.getPurchasePrice());
+            ps.setInt(2, userStock.getQuantity());
+            ps.setString(3, userStock.getCurrency());
+            ps.setInt(4, userStock.getId());
+
+            int rowsUpdated = ps.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                System.out.println("User stock updated successfully.");
+            } else {
+                System.out.println("No matching record found to update.");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Error in editUserStock: " + e.getMessage());
+        }
+    }
+
+    public static void deleteUserStock(UserStock userStock) {
+        String sql = "DELETE FROM user_stocks WHERE id = ?";
+
+        try (Connection conn = DatabaseConnector.connect()) {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, userStock.getId());
+
+            int rowsDeleted = ps.executeUpdate();
+
+            if (rowsDeleted > 0) {
+                System.out.println("User stock deleted successfully.");
+            } else {
+                System.out.println("No matching record found to delete.");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Error in deleteUserStock: " + e.getMessage());
+        }
+    }
+
+
     public static ArrayList<UserStock> getUserStocks(int userId){
         ArrayList<UserStock> userStocks = new ArrayList<>();
         String sql = "SELECT * FROM user_stocks WHERE user_id=?";
@@ -45,5 +86,23 @@ public class UserStockDAO {
             logger.log(Level.SEVERE, "Error in getUserStocks: " + e.getMessage());
         }
         return userStocks;
+    }
+
+    public static UserStock getUserStockById(int id){
+        String sql = "SELECT * FROM user_stocks WHERE id=?";
+        UserStock userStock = null;
+        try (Connection conn = DatabaseConnector.connect()) {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                userStock = new UserStock(rs.getInt("id"), rs.getInt("user_id"),
+                        rs.getInt("stock_id"), rs.getInt("purchase_price"),
+                        rs.getInt("quantity"), rs.getString("currency"));
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Error in getUserStockById: " + e.getMessage());
+        }
+        return userStock;
     }
 }

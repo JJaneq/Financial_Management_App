@@ -14,8 +14,8 @@ import java.util.logging.Logger;
 public class CategoryDAO {
     private static final Logger logger = Logger.getLogger(CategoryDAO.class.getName());
 
-    public static Categories getdById(int id){
-        String sql = "SELECT * FROM CATEGORIES WHERE id = ?";
+    public static Categories getById(int id){
+        String sql = "SELECT * FROM categories WHERE id = ?";
         try (Connection conn = DatabaseConnector.connect()) {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
