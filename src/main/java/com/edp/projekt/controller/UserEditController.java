@@ -2,6 +2,8 @@ package com.edp.projekt.controller;
 
 import com.edp.projekt.db.User;
 import com.edp.projekt.DAO.UserDAO;
+import com.edp.projekt.events.MainScreenRefreshEvent;
+import com.edp.projekt.service.EventBusManager;
 import com.edp.projekt.service.ServiceManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,8 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class UserEditController implements BasicController{
-    MainController parentController;
+public class UserEditController extends BasicController{
     @FXML
     private Label profileLabel;
     @FXML
@@ -21,13 +22,9 @@ public class UserEditController implements BasicController{
     @FXML
     private TextField monthlyLimitTextField;
 
-    @Override
-    public void setParentController(MainController mainController) {
-        this.parentController = mainController;
-    }
-
     @FXML
-    private void initialize() {
+    public void initialize() {
+        super.initialize();
         User currentUser = UserDAO.getUser(ServiceManager.loadLastUserId());
         profileLabel.setText("Profil: " + currentUser.toString());
         usernameTextField.setText(currentUser.getUsername());
@@ -43,7 +40,7 @@ public class UserEditController implements BasicController{
         newUser.setMonthLimit(Float.parseFloat(monthlyLimitTextField.getText()));
         UserDAO.updateUser(ServiceManager.loadLastUserId(), newUser);
 
-        parentController.updateMainScreen();
+        EventBusManager.post(new MainScreenRefreshEvent());
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }

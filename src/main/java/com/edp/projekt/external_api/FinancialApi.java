@@ -141,7 +141,7 @@ public class FinancialApi {
                 csvData.append(line).append("\n");
             }
         }
-        //System.out.println(csvData.toString());
+        System.out.println(csvData.toString());
         return csvData.toString();
     }
 

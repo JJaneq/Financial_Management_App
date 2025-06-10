@@ -1,0 +1,139 @@
+/* Ogólne tło i kolor tekstu */
+.root {
+    -fx-base: #f0f0f0;
+    -fx-background: #ffffff;
+    -fx-control-inner-background: #ffffff;
+    -fx-text-fill: #000000;
+}
+
+/* Przyciski */
+.button {
+    -fx-background-color: #e0e0e0;
+    -fx-text-fill: #000000;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+}
+
+.button:hover {
+    -fx-background-color: #d5d5d5;
+}
+
+.button:pressed {
+    -fx-background-color: #bbbbbb;
+}
+
+/* Pola tekstowe */
+.text-field,
+.password-field {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+    -fx-prompt-text-fill: #888888;
+    -fx-border-color: #cccccc;
+}
+
+/* Tekst */
+.label,
+.text {
+    -fx-text-fill: #000000;
+}
+
+/* ComboBox */
+.combo-box,
+.combo-box-base {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: #000000;
+    -fx-background-color: #ffffff;
+}
+
+/* ListView */
+.list-view {
+    -fx-control-inner-background: #ffffff;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.list-cell {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+}
+
+.list-cell:filled:selected, .list-cell:focused {
+    -fx-background-color: #d0d0d0;
+    -fx-text-fill: #000000;
+}
+
+/* TableView */
+.table-view {
+    -fx-background-color: #ffffff;
+    -fx-table-cell-border-color: #dddddd;
+}
+
+.table-row-cell {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #d0d0d0;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #f0f0f0;
+}
+
+/* ScrollBar */
+.scroll-bar {
+    -fx-background-color: #f0f0f0;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #bbbbbb;
+    -fx-background-insets: 2;
+}
+
+/* Tooltip */
+.tooltip {
+    -fx-background-color: #f9f9f9;
+    -fx-text-fill: #000000;
+    -fx-border-color: #cccccc;
+}
+
+/* MenuBar */
+.menu-bar {
+    -fx-background-color: #f0f0f0;
+}
+
+.menu {
+    -fx-text-fill: #000000;
+}
+
+.menu-item {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+}
+
+/* ProgressBar */
+.progress-bar {
+    -fx-accent: #2196f3;
+    -fx-control-inner-background: #ffffff;
+}
+
+/* TabPane */
+.tab-pane {
+    -fx-tab-min-height: 30px;
+}
+
+.tab {
+    -fx-background-color: #e0e0e0;
+    -fx-text-base-color: #000000;
+}
+
+.tab:selected {
+    -fx-background-color: #ffffff;
+}

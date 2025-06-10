@@ -2,6 +2,8 @@ package com.edp.projekt.controller;
 
 import com.edp.projekt.db.User;
 import com.edp.projekt.DAO.UserDAO;
+import com.edp.projekt.events.MainScreenRefreshEvent;
+import com.edp.projekt.service.EventBusManager;
 import com.edp.projekt.service.ServiceManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,16 +13,9 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
-public class UserChangeController implements BasicController{
-    MainController parentController;
-
+public class UserChangeController extends BasicController{
     @FXML
     ChoiceBox<String> userChoiceBox;
-
-    @Override
-    public void setParentController(MainController mainController) {
-        this.parentController = mainController;
-    }
 
     @FXML
     public void initialize() {
@@ -38,7 +33,7 @@ public class UserChangeController implements BasicController{
     @FXML
     public void onChangeButtonClicked(ActionEvent event) {
         ServiceManager.saveLastUserId(UserDAO.getUser(userChoiceBox.getValue()).getId());
-        parentController.updateMainScreen();
+        EventBusManager.post(new MainScreenRefreshEvent());
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }

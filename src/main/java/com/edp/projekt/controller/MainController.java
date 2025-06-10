@@ -1,16 +1,20 @@
 package com.edp.projekt.controller;
 
-import com.edp.projekt.DAO.StockPriceDAO;
-import com.edp.projekt.DAO.TransactionDAO;
-import com.edp.projekt.DAO.UserStockDAO;
+import com.edp.projekt.DAO.*;
 import com.edp.projekt.components.BudgetIndicator;
 import com.edp.projekt.components.StockChart;
 import com.edp.projekt.db.Transaction;
 import com.edp.projekt.db.User;
-import com.edp.projekt.DAO.UserDAO;
 import com.edp.projekt.db.UserStock;
+import com.edp.projekt.events.ChangePreferredStockChartEvent;
+import com.edp.projekt.events.ChangeResolutionEvent;
+import com.edp.projekt.events.ChangeThemeEvent;
+import com.edp.projekt.events.MainScreenRefreshEvent;
 import com.edp.projekt.external_api.FinancialApi;
+import com.edp.projekt.external_api.NbpApiClient;
+import com.edp.projekt.service.EventBusManager;
 import com.edp.projekt.service.ServiceManager;
+import com.google.common.eventbus.Subscribe;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -22,12 +26,21 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.awt.*;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MainController {
+    @FXML
+    private Stage primaryStage;
     @FXML
     private Label helloLabel, spendingLabel, moneyLabel;
     @FXML
@@ -42,59 +55,92 @@ public class MainController {
 
     @FXML
     private void initialize() {
+        EventBusManager.register(this);
         updateMainScreen();
-        stockChart.setSymbol("CDR");
+        stockChart.setSymbol(ServiceManager.getPreferredStock());
+        if (ServiceManager.getPreferredStock().equals("Brak danych")) stockChart.updateChart();
         StockPriceDAO.updateStockPrices();
     }
 
-    @FXML
-    private void onAddUser() throws IOException {
-        UserCreationController controller = createView("user-creation-view", false);
+    public void setStage(Stage stage) {
+        this.primaryStage = stage;
+        changeTheme(ServiceManager.getPreferredTheme());
+        changeStockPanel(ServiceManager.getPreferredStock());
+        changeResolution(ServiceManager.getPreferredResolution());
+    }
+
+    @Subscribe
+    public void onRefresh(MainScreenRefreshEvent event) {
+        updateMainScreen();
+    }
+
+    @Subscribe
+    public void onResolutionChange(ChangeResolutionEvent event) {
+        changeResolution(event.getResolution());
+    }
+
+    @Subscribe
+    public void onChangePreferredStockChart(ChangePreferredStockChartEvent event) {
+        changeStockPanel(event.getStockSymbol());
+    }
+
+    @Subscribe
+    public void onChangeTheme(ChangeThemeEvent event) {
+        changeTheme(event.getTheme());
     }
 
     @FXML
-    private void onChangeUser() throws IOException {
-        UserChangeController controller = createView("user-change-view", false);
+    private void onAddUser() {
+        createView("user-creation-view", "UserCreationController",false);
     }
 
     @FXML
-    private void onDeleteUser() throws IOException {
-        UserDeleteController controller = createView("user-delete-view", false);
+    private void onChangeUser() {
+        createView("user-change-view", "UserChangeController", false);
     }
 
     @FXML
-    private void onEditUser() throws IOException {
-        UserEditController controller = createView("user-edit-view", false);
+    private void onDeleteUser() {
+         createView("user-delete-view", "UserDeleteController", false);
     }
 
     @FXML
-    private void onAddSpendingButtonClicked() throws IOException {
-        SpendingCreationController controller = createView("spending-creation-view", false);
+    private void onEditUser() {
+        createView("user-edit-view", "UserEditController", false);
     }
 
     @FXML
-    private void onBuyButtonClicked() throws IOException, InterruptedException {
-//        System.out.println("Financial button clicked");
-//        System.out.println(FinancialApi.getFinancialData("IBM", "5min"));
-        StockAddController controller = createView("stock-add-view", false);
+    private void onAddSpendingButtonClicked() {
+        createView("spending-creation-view", "SpendingCreationController",false);
     }
 
     @FXML
-    private void onSellButtonClicked() throws IOException, InterruptedException {
-        StockSellController controller = createView("stock-sell-view", false);
+    private void onBuyButtonClicked() {
+        createView("stock-add-view", "StockAddController",false);
     }
 
     @FXML
-    private void onAddProfitButtonClicked() throws IOException, InterruptedException {
-        ProfitCreationController controller = createView("profit-creation-view", false);
+    private void onSellButtonClicked() {
+        createView("stock-sell-view", "StockSellController",false);
     }
 
     @FXML
-    private void onDetailButtonClicked() throws IOException, InterruptedException {
-        ExpensePieChartController controller = createView("expense-pie-chart-view", true);
+    private void onAddProfitButtonClicked() {
+        createView("profit-creation-view", "ProfitCreationController",false);
     }
 
-    public void updateMainScreen() {
+    @FXML
+    private void onDetailButtonClicked() {
+        createView("expense-pie-chart-view", "ExpensePieChartController",true);
+    }
+
+    @FXML
+    private void onPreferencesClicked() {
+        System.out.println("Preferences");
+        createView("preferences-change-view", "PreferencesChangeController",true);
+    }
+
+    private void updateMainScreen() {
         updateUserInfoPane();
         updateTransactionsInfoPane();
         updateUserStockInfoPane();
@@ -118,8 +164,6 @@ public class MainController {
             moneyLabel.setVisible(true);
             menuDelete.setVisible(true);
             menuEdit.setVisible(true);
-
-            //TODO: aktualizuj wydatki na komponencie - potrzeba metody sprawdzającej miesięczne wydatki w DAO + wybierz api do stocka
         } else {
             helloLabel.setText("Wybierz istniejący profil lub utwórz nowy");
             spendingLabel.setVisible(false);
@@ -129,30 +173,71 @@ public class MainController {
         }
     }
 
+    private void changeResolution(Dimension resolution) {
+        primaryStage.setWidth(resolution.getWidth());
+        primaryStage.setHeight(resolution.getHeight());
+    }
 
+    private void changeStockPanel(String newStockSymbol) {
+        stockChart.setSymbol(newStockSymbol);
+        stockChart.updateChart();
+    }
+
+    private void changeTheme(String newTheme) {
+        Scene scene = primaryStage.getScene();
+        scene.getStylesheets().clear();
+        System.out.println(newTheme);
+        String themePath = "/themes/" + newTheme;
+        URL themeUrl = getClass().getResource(themePath);
+        if (themeUrl == null) {
+            System.err.println("Nie znaleziono pliku CSS: " + themePath);
+            return;
+        }
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add(themeUrl.toExternalForm());
+    }
 
     private void updateTransactionsInfoPane() {
         ArrayList<Transaction> expenses = TransactionDAO.getAllTransactions(1);
         VBox.setMargin(expensesVBox, new Insets(20, 0, 20, 0));
         expensesVBox.setSpacing(15);
         expensesVBox.getChildren().clear();
+
         if (expenses.isEmpty()) {
             Label label = new Label("Brak wydatków w ostatnim miesiącu :)");
             label.setStyle("-fx-font-size: 16px");
             expensesVBox.getChildren().add(label);
-        }
-        else {
+        } else {
+            DecimalFormat currencyFormat = new DecimalFormat("#0.00");
+
             for (Transaction expense : expenses) {
-                Label label = new Label(expense.toString());
+                StringBuilder builder = new StringBuilder();
+
+                // Pobierz kurs wymiany
+                NbpApiClient client = new NbpApiClient(expense.getCurrencySymbol());
+                double exchangeRate = client.getExchangeRate();
+
+                // Przeliczona kwota w PLN
+                double amountPLN = exchangeRate * expense.getPrice();
+
+                // Zbuduj ładny opis
+                builder.append(CategoryDAO.getById(expense.getCategoryId())).append(": ");
+                builder.append(expense.getDescription());
+                builder.append(" (").append(currencyFormat.format(amountPLN)).append(" PLN)");
+
+                // Ustaw label i kolor
+                Label label = new Label(builder.toString());
                 if (Objects.equals(expense.getType(), "income")) {
                     label.setStyle("-fx-font-size: 16px; -fx-text-fill: green;");
-                }
-                else if (Objects.equals(expense.getType(), "expense"))
+                } else if (Objects.equals(expense.getType(), "expense")) {
                     label.setStyle("-fx-font-size: 16px; -fx-text-fill: red;");
+                }
+
                 expensesVBox.getChildren().add(label);
             }
         }
     }
+
 
     private void updateUserStockInfoPane() {
         ArrayList<UserStock> stocks = UserStockDAO.getUserStocks(ServiceManager.loadLastUserId());
@@ -166,27 +251,54 @@ public class MainController {
         }
         else {
             for (UserStock stock : stocks) {
-                Label label = new Label(stock.toString());
+                StringBuilder builder = new StringBuilder();
+                NbpApiClient client = new NbpApiClient(stock.getCurrency());
+                double exchangeRate = client.getExchangeRate();
+
+                Double purchasePrice = exchangeRate * stock.getPurchasePrice() * stock.getQuantity();
+                DecimalFormat currencyFormat = new DecimalFormat("#0.00");
+                builder.append(StockDAO.getStockSymbol(stock.getStockId())).append("(");
+                builder.append(stock.getQuantity()).append(") zakup: ");
+                builder.append(currencyFormat.format(purchasePrice)).append(" PLN, obecna: ");
+
+                Double currentPrice = exchangeRate * stock.getQuantity() * StockPriceDAO.getLatestPrice(stock.getStockId());
+                builder.append(currencyFormat.format(currentPrice)).append(" PLN");
+                Label label = new Label(builder.toString());
                 label.setStyle("-fx-font-size: 16px");
                 stocksVBox.getChildren().add(label);
             }
         }
     }
 
-    private <T extends BasicController> T createView(String loaderView, boolean decorated) throws IOException {
+    private void createView(String loaderView, String controllerClassName, boolean decorated) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/edp/projekt/" + loaderView + ".fxml"));
+
+        //Reflection
+        try {
+        Class<?> clazz = Class.forName("com.edp.projekt.controller." + controllerClassName);
+        Object controllerInstance = clazz.getDeclaredConstructor().newInstance();
+        loader.setController(controllerInstance);
+
         Parent root = loader.load();
-
-        T controller = loader.getController();
-        controller.setParentController(this);
-
-        Stage newStage = new Stage();
-        newStage.setScene(new Scene(root));
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
         if (!decorated)
-            newStage.initStyle(StageStyle.UNDECORATED);
-        newStage.showAndWait();
+            stage.initStyle(StageStyle.UNDECORATED);
 
-        return controller;
+        try {
+            Method setStageMethod = clazz.getMethod("setStage", Stage.class);
+            setStageMethod.invoke(controllerInstance, stage);
+            Method setThemeMethod = clazz.getMethod("loadTheme");
+            setThemeMethod.invoke(controllerInstance);
+        } catch (NoSuchMethodException e) {
+            Logger.getLogger(MainController.class.getName()).log(Level.WARNING,
+                    "Controller does not have setStage(Stage): " + controllerClassName);
+        }
+
+        stage.showAndWait();
+        } catch (ClassNotFoundException | NoSuchMethodException | IOException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, "Error in createView: " + e.getMessage());
+        }
     }
 }
 

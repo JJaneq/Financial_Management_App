@@ -7,6 +7,8 @@ module com.edp.projekt {
     requires java.net.http;
     requires org.json;
     requires java.desktop;
+    requires com.google.common;
+    requires org.apache.commons.lang3;
 
 
     opens com.edp.projekt to javafx.fxml;

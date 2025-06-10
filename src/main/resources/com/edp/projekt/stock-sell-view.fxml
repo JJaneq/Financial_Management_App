@@ -5,8 +5,7 @@
 
 <AnchorPane prefHeight="280.0" prefWidth="350.0"
             xmlns="http://javafx.com/javafx/17.0.12"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.edp.projekt.controller.StockSellController">
+            xmlns:fx="http://javafx.com/fxml/1">
 
     <children>
 

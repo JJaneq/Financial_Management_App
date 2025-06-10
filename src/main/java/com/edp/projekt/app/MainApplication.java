@@ -1,6 +1,7 @@
 package com.edp.projekt.app;
 
 import com.edp.projekt.DAO.StockDAO;
+import com.edp.projekt.controller.MainController;
 import com.edp.projekt.service.AppExecutor;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -14,8 +15,10 @@ public class MainApplication extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/com/edp/projekt/main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1080, 720);
+        MainController mainController = fxmlLoader.getController();
         stage.setTitle("Financial App");
         stage.setScene(scene);
+        mainController.setStage(stage);
         stage.show();
     }
 

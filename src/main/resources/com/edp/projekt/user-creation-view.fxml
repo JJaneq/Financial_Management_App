@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="createUserView" prefHeight="220.0" prefWidth="280.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.edp.projekt.controller.UserCreationController">
+<AnchorPane fx:id="createUserView" prefHeight="220.0" prefWidth="280.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" >
    <children>
       <Label text="Podaj nazwę profilu:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
       <Label layoutX="10.0" layoutY="10.0" text="Podaj dostępne środki:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="60.0" />

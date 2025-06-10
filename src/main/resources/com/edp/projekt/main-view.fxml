@@ -18,10 +18,9 @@
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Preferencje">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Tryb ciemny/jasny" />
-                    </items>
-                </Menu>
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#onPreferencesClicked" text="Edytuj" />
+               </items></Menu>
                 <Menu mnemonicParsing="false" text="Pomoc" />
             </menus>
         </MenuBar>
@@ -91,7 +90,7 @@
                         </AnchorPane>
                         <AnchorPane prefHeight="100.0" prefWidth="160.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
                             <children>
-                                <SplitPane dividerPositions="0.5" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <SplitPane dividerPositions="0.25" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
                                     <items>
                                         <AnchorPane>

@@ -4,6 +4,8 @@ import com.edp.projekt.DAO.*;
 import com.edp.projekt.db.Stock;
 import com.edp.projekt.db.Transaction;
 import com.edp.projekt.db.UserStock;
+import com.edp.projekt.events.MainScreenRefreshEvent;
+import com.edp.projekt.service.EventBusManager;
 import com.edp.projekt.service.ServiceManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,8 +16,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-public class StockAddController implements BasicController{
-    MainController parentController;
+public class StockAddController extends BasicController{
     @FXML
     private Spinner<Integer> quantitySpinner;
 
@@ -28,13 +29,9 @@ public class StockAddController implements BasicController{
     @FXML
     private ComboBox<String> currencyComboBox;
 
-    @Override
-    public void setParentController(MainController mainController) {
-        this.parentController = mainController;
-    }
-
     @FXML
-    private void initialize() {
+    public void initialize() {
+        super.initialize();
         quantitySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000));
         currencyComboBox.getItems().add("EUR");
         currencyComboBox.getItems().add("USD");
@@ -106,10 +103,11 @@ public class StockAddController implements BasicController{
             transaction.setCategoryId(CategoryDAO.getCategoryId("Inwestycje"));
             transaction.setCurrencySymbol(userStock.getCurrency());
             transaction.setDescription(StockDAO.getStockSymbol(userStock.getStockId()) + " : " + quantitySpinner.getValue());
-            transaction.setPrice(quantitySpinner.getValue() * StockPriceDAO.getLatestPrice(userStock.getStockId()));
+            transaction.setPrice(quantitySpinner.getValue() * Float.parseFloat(priceField.getText()));
             TransactionDAO.addTransaction(transaction);
 
-            parentController.updateMainScreen();
+            EventBusManager.post(new MainScreenRefreshEvent());
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.close();
         }

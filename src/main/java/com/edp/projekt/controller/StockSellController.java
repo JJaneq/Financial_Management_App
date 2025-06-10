@@ -3,6 +3,8 @@ package com.edp.projekt.controller;
 import com.edp.projekt.DAO.*;
 import com.edp.projekt.db.Transaction;
 import com.edp.projekt.db.UserStock;
+import com.edp.projekt.events.MainScreenRefreshEvent;
+import com.edp.projekt.service.EventBusManager;
 import com.edp.projekt.service.ServiceManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,8 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StockSellController implements BasicController{
-    MainController parentController;
+public class StockSellController extends BasicController{
     Map<Integer, String> userStockValues;
     @FXML
     ChoiceBox<String> stockChoiceBox;
@@ -27,11 +28,6 @@ public class StockSellController implements BasicController{
     Spinner<Integer> quantitySpinner;
     @FXML
     Label currentPriceLabel, purchasePriceLabel;
-
-    @Override
-    public void setParentController(MainController mainController) {
-        this.parentController = mainController;
-    }
 
     @FXML
     public void initialize() {
@@ -83,7 +79,8 @@ public class StockSellController implements BasicController{
             UserStockDAO.editUserStock(userStock);
         }
 
-        parentController.updateMainScreen();
+        EventBusManager.post(new MainScreenRefreshEvent());
+
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }

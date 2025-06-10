@@ -7,22 +7,21 @@ import com.edp.projekt.DAO.UserDAO;
 import com.edp.projekt.db.Categories;
 import com.edp.projekt.db.Transaction;
 import com.edp.projekt.db.User;
+import com.edp.projekt.events.MainScreenRefreshEvent;
+import com.edp.projekt.events.TransactionAddedEvent;
+import com.edp.projekt.service.EventBusManager;
 import com.edp.projekt.service.ServiceManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class SpendingCreationController implements BasicController{
-    MainController parentController;
-
+public class SpendingCreationController extends BasicController{
     @FXML
     TextField moneyTextField;
     @FXML
@@ -33,7 +32,8 @@ public class SpendingCreationController implements BasicController{
     TextArea descriptionTextArea;
 
     @FXML
-    private void initialize() {
+    public void initialize() {
+        super.initialize();
         ArrayList<Categories> categories = CategoryDAO.getAllByType("expense");
         for (Categories category : categories) {
             categoryChoiceBox.getItems().add(category.toString());
@@ -53,11 +53,6 @@ public class SpendingCreationController implements BasicController{
         currencyChoiceBox.setValue("PLN");
     }
 
-    @Override
-    public void setParentController(MainController mainController) {
-        this.parentController = mainController;
-    }
-
     @FXML
     private void onCancelButtonClicked(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -66,21 +61,62 @@ public class SpendingCreationController implements BasicController{
 
     @FXML
     private void onAddButtonClicked(ActionEvent event) {
-        //TODO: dodaj walidację danych
+        String priceText = moneyTextField.getText();
+        if (StringUtils.isBlank(priceText)) {
+            showError("Wprowadź kwotę.");
+            return;
+        }
+        float price;
+        try {
+            price = Float.parseFloat(priceText);
+            if (price <= 0) {
+                showError("Kwota musi być większa od zera.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            showError("Nieprawidłowy format kwoty.");
+            return;
+        }
+        String description = descriptionTextArea.getText();
+        if (StringUtils.isBlank(description)) {
+            showError("Wprowadź opis wydatku.");
+            return;
+        }
+        String selectedCategory = categoryChoiceBox.getValue();
+        int categoryId = CategoryDAO.getCategoryId(selectedCategory);
+        if (categoryId == -1) {
+            showError("Wybierz poprawną kategorię.");
+            return;
+        }
+
+        // Tworzenie obiektu transakcji
         Transaction newExpense = new Transaction();
-        newExpense.setPrice(Float.parseFloat(moneyTextField.getText()));
-        newExpense.setDescription(descriptionTextArea.getText());
-        //TODO: może być category -1
-        newExpense.setCategoryId(CategoryDAO.getCategoryId(categoryChoiceBox.getValue()));
+        newExpense.setPrice(price);
+        newExpense.setDescription(description);
+        newExpense.setCategoryId(categoryId);
         newExpense.setUserId(ServiceManager.loadLastUserId());
         newExpense.setCurrencySymbol(currencyChoiceBox.getValue());
         newExpense.setExpenseTime(datePicker.getValue().atStartOfDay());
         newExpense.setType("expense");
+
+        // Zapis do bazy
         TransactionDAO.addTransaction(newExpense);
-        User user = UserDAO.getUser(ServiceManager.loadLastUserId());
+        User user = UserDAO.getUser(newExpense.getUserId());
         user.handleTransaction(newExpense);
-        parentController.updateMainScreen();
+
+        EventBusManager.post(new TransactionAddedEvent(newExpense));
+        EventBusManager.post(new MainScreenRefreshEvent());
+
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
+
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Błąd");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 }

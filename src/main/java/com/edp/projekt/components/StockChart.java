@@ -32,7 +32,6 @@ public class StockChart extends VBox {
     private final AnchorPane buttonAnchorPane;
     private final HBox checkBoxRow, choiceBoxRow;
     private final CheckBox openCheckBox, highCheckBox, lowCheckBox, closeCheckBox;
-
     private String stockSymbol;
 
     public StockChart() {
@@ -136,7 +135,7 @@ public class StockChart extends VBox {
     public void setSymbol(String symbol) {
         this.titleLabel.setText("Wykres akcji: " + symbol);
         this.stockSymbol = symbol;
-        this.updateData(120);
+        this.stockSymbolBox.getSelectionModel().select(symbol);
     }
 
     public void updateData() {
@@ -186,12 +185,13 @@ public class StockChart extends VBox {
         scrollPane.setFitToWidth(true); // <--- kluczowe!
     }
 
-    private void updateChart() {
+    public void updateChart() {
         String selectedSymbol = stockSymbolBox.getSelectionModel().getSelectedItem();
         if (selectedSymbol == null) {
             selectedSymbol = this.stockSymbol;
         }
         setSymbol(selectedSymbol);
+        if (this.stockSymbol.equals("Brak danych")) return;
         String selectedLength = stockLenghtBox.getSelectionModel().getSelectedItem();
         int days = -1;
         days = switch (selectedLength) {
